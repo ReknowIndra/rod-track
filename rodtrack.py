@@ -3,6 +3,7 @@
 Tracking of rodlike particles in microscopic video sequences
 
 Created on Mon Jan  4 12:56:23 2021
+Updated on Thu Mar  4 11:37:51 2021
 
 @author: Erwin K. Reichel, JKU Linz, Austria
 """
@@ -114,7 +115,7 @@ class rod:
         mini = lss.index(min(lss))
         return [lsr[mini]-sr,lsx[mini]-stx,lsy[mini]-sty]
 
-    def seqapath(self,start=0,stop=-1):
+    def seqapath(self,start=0,stop=-1,dra=10*pi/180,dta=10,nrot=41,nt=21):
         """tracking of original selected region"""
         self.rs = [0.0]
         self.xp = [self.cc]
@@ -128,13 +129,13 @@ class rod:
         print("finding path in images (absolute)...")
         for k in range(start,lind):
             print ("step " + str(k))
-            r,dx,dy = self.diffind(0,k+1,sr=self.rs[-1],stx=self.xp[-1]-self.xp[0],sty=self.yp[-1]-self.yp[0])
+            r,dx,dy = self.diffind(0,k+1,dra=dra,dta=dta,nrot=nrot,nt=nt,sr=self.rs[-1],stx=self.xp[-1]-self.xp[0],sty=self.yp[-1]-self.yp[0])
             self.rs.append(self.rs[-1]+r)
             self.xp.append(self.xp[-1]+dx)
             self.yp.append(self.yp[-1]+dy)
             print(str(k) + " to " + str(k+1))
 
-    def seqpath(self,start=0,stop=-1):
+    def seqpath(self,start=0,stop=-1,dra=10*pi/180,dta=10,nrot=41,nt=21):
         """tracking with update in each step - prone to dead-reckoning errors but able to adjust to change in appearance"""
         self.rs = [0.0]
         self.xp = [self.cc]
@@ -147,7 +148,7 @@ class rod:
         
         print("finding path in images (relative)...")
         for k in range(start,lind):
-            r,dx,dy = self.diffind(k,k+1)
+            r,dx,dy = self.diffind(k,k+1,dra=dra,dta=dta,nrot=nrot,nt=nt)
             self.rs.append(self.rs[-1]+r)
             self.xp.append(self.xp[-1]+dx)
             self.yp.append(self.yp[-1]+dy)
